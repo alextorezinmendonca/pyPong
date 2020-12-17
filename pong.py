@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from OpenGL.GL import *
+from OpenGL.GLUT import *
 
 LARGURA_JANELA = 640
 ALTURA_JANELA = 480
@@ -55,13 +56,11 @@ def atualizar():
         xDaBola = 0
         yDaBola = 0
         pontoJogador1 = 1 + pontoJogador1
-        print('Jogador 1', pontoJogador1)
 
     if xDaBola < -LARGURA_JANELA / 2:
         xDaBola = 0
         yDaBola = 0
         pontoJogador2 = 1 + pontoJogador2
-        print('jogado 2', pontoJogador2)
 
     keys = pygame.key.get_pressed()
 
@@ -88,7 +87,6 @@ def desenharRetangulo(x, y, largura, altura, r, g, b):
     glEnd()
 
 def desenhar():
-    global pontoJogador1, pontoJogador2
 
     glViewport(0, 0, LARGURA_JANELA, ALTURA_JANELA)
 
@@ -102,13 +100,32 @@ def desenhar():
     desenharRetangulo(xDoJogador1(), yDoJogador1, larguraDosJogadores(), alturaDosJogadores(), 1, 0, 0)
     desenharRetangulo(xDoJogador2(), yDoJogador2, larguraDosJogadores(), alturaDosJogadores(), 0, 0, 1)
 
+    linha_vertical(0,ALTURA_JANELA)
+    placar()
     pygame.display.flip()
 
+def linha_vertical(posicao,tamanho):
+    glColor3f(1,1,1)
+    glBegin(GL_LINES)
+    glVertex2f(posicao, tamanho)
+    glVertex2f(posicao, -tamanho)
+    glEnd()
+
+def texto(x, y, texto, r, g, b):
+    glutInit()
+    glColor3f(r, g, b)
+    glRasterPos2f(x,y)
+    for caracter in texto:    
+        glutBitmapCharacter(GLUT_BITMAP_8_BY_13, ord(caracter))
+
+def placar():
+    texto(-310,210, 'Jogador 1: ', 1, 1, 1)
+    texto(-210,210, str(pontoJogador1), 1, 1, 1)
+    texto(180,210, 'Jogador 2: ', 1, 1, 1)
+    texto(280,210, str(pontoJogador2), 1, 1, 1)
+
 pygame.init()
-screen = pygame.display.set_mode((LARGURA_JANELA, ALTURA_JANELA), DOUBLEBUF | OPENGL)
-font = pygame.font.Font(pygame.font.get_default_font(), 360)
-text_surface = font.render('Olá mundofdsfdsfsdfsdfsdfdsfs',True, pygame.Color('white'))
-screen.blit(text_surface, dest=(0,0))
+pygame.display.set_mode((LARGURA_JANELA, ALTURA_JANELA), DOUBLEBUF | OPENGL)
 
 while True:
 
