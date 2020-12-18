@@ -132,5 +132,9 @@ while True:
     atualizar()
     desenhar()
     pygame.event.pump()
-    pygame.time.wait(30)
+    pygame.time.wait(20)
+
+    keys = pygame.key.get_pressed()
+    if keys[K_x]: #hit x to close the game
+        pygame.display.quit()
 
